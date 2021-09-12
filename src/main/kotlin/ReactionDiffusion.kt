@@ -1,11 +1,6 @@
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.loadFont
-import org.openrndr.draw.loadImage
-import org.openrndr.draw.tint
-import kotlin.math.cos
 import kotlin.math.floor
-import kotlin.math.sin
 
 data class Chemicals(val a: Double, val b: Double)
 data class Dimensions(val height: Int, val width: Int)
@@ -20,7 +15,7 @@ class ReactionDiffusion(val height: Int, val width: Int) {
     private val feed = 0.055
     private val da = 1.0
     private val db = 0.5
-    private val k = 0.062
+    private val k  = 0.062
     private val t = 1
 
     private val weights = mapOf(Pair(0,0) to -1.0,
@@ -90,26 +85,29 @@ fun main() = application {
     }
 
     program {
-        val simulation = ReactionDiffusion(50, 50)
+        val simulation = ReactionDiffusion(height, width)
         var coordinates = mutableListOf<Coordinate>()
 
-        for (i in 0..10) {
-            for (j in 0..10) {
-                coordinates.add(Coordinate(30 + i, 30 + j))
-            }
+        for (i in 0..50) {
+            coordinates.add(Coordinate(0, i))
+            coordinates.add(Coordinate(10, i))
+            coordinates.add(Coordinate(15, i))
+            coordinates.add(Coordinate(20, i))
+            coordinates.add(Coordinate(25, i))
+            coordinates.add(Coordinate(30, i))
         }
         simulation.addChemicals(coordinates)
 
-
         extend {
             simulation.tick()
-            drawer.fill = ColorRGBa.PINK
-
             for (item in simulation.curr) {
                 val coord = item.key
                 val chemicals = item.value
-                val color = floor((chemicals.a - chemicals.b) * 255.0)
-                drawer.fill = ColorRGBa(color, color, color, 255.0)
+                val r = floor( chemicals.a * 255.0)
+                val g = floor((chemicals.a - chemicals.b) * 255.0)
+                val b = floor(chemicals.b * 255.0)
+                drawer.fill = ColorRGBa(r, g, b, 255.0)
+                drawer.stroke = ColorRGBa(r, g, b, 255.0)
                 drawer.rectangle(coord.x.toDouble() * 4, coord.y.toDouble() * 4, 4.0, 4.0)
 
             }

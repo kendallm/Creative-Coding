@@ -41,7 +41,7 @@ val orxFeatures = setOf(
 //  "orx-osc",
 //  "orx-palette",
     "orx-panel",
-//  "orx-parameters",
+    "orx-parameters",
 //  "orx-poisson-fill",
 //  "orx-rabbit-control",
 //  "orx-realsense2",
